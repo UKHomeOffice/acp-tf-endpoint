@@ -37,5 +37,6 @@ variable "vpc_id" {
 
 variable "route_table_ids" {
   description = "A collection of route tables routing traffic to the endpoints (only valid for endpoints of type Gateway)"
-  type        = "list"
+  type        = list(string)
 }
+
