@@ -13,7 +13,9 @@
  *             "port" = "6001"
  *          },
  *        ]
- *        subnet_ids     = [ "subnet-323829832", "subnet-32382122" ]
+ *        subnet_tags     = {
+ *          "SubnetType" = "public"
+ *        }
  *      }
  *
  */
@@ -24,6 +26,12 @@ data "aws_route53_zone" "selected" {
 
   name         = "${var.dns_zone}"
   private_zone = "${var.dns_private}"
+}
+
+# Get a list of the subnets to attach to
+data "aws_subnet_ids" "selected" {
+  tags   = "${var.subnet_tags}"
+  vpc_id = "${var.vpc_id}"
 }
 
 ## Create the security group for the endpoint
@@ -66,7 +74,7 @@ resource "aws_security_group_rule" "egress" {
 resource "aws_vpc_endpoint" "endpoint" {
   security_group_ids = ["${aws_security_group.filter.id}"]
   service_name       = "${var.service_name}"
-  subnet_ids         = ["${var.subnet_ids}"]
+  subnet_ids         = ["${data.aws_subnet_ids.selected.ids}"]
   vpc_endpoint_type  = "Interface"
   vpc_id             = "${var.vpc_id}"
 }
