@@ -23,53 +23,19 @@ variable "dns_zone" {
   default     = ""
 }
 
-variable "ingress" {
-  description = "An array of map of ingress rules for the security group"
-
-  default = [
-    {
-      cidr     = "0.0.0.0/0"
-      port     = "-1"
-      protocol = "tcp"
-    },
-  ]
-}
-
-variable "egress" {
-  description = "An array of map of egress rules for the security group"
-
-  default = [
-    {
-      cidr     = "0.0.0.0/0"
-      port     = "-1"
-      protocol = "-1"
-    },
-  ]
-}
-
 variable "name" {
   description = "A descriptive name for the endpoint you can consuming"
-}
-
-variable "security_group_name" {
-  description = "An optional override to the security group name of the endpoint"
-  default     = ""
 }
 
 variable "service_name" {
   description = "The private link endpoint service you wish to consumer"
 }
 
-variable "security_tags" {
-  description = "A map of additional tags you can add to the security group tags"
-  default     = {}
-}
-
-variable "subnet_tags" {
-  description = "A map of tags to match the subnets we should attach the endpoint"
-  type        = "map"
-}
-
 variable "vpc_id" {
   description = "The VPC id you to adding the endpoint to"
+}
+
+variable "route_table_ids" {
+  description = "A collection of route tables routing traffic to the endpoints (only valid for endpoints of type Gateway)"
+  type        = "list"
 }
