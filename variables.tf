@@ -67,7 +67,7 @@ variable "security_tags" {
 
 variable "subnet_tags" {
   description = "A map of tags to match the subnets we should attach the endpoint"
-  type        = "map"
+  type        = map(string)
 }
 
 variable "vpc_id" {

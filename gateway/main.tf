@@ -10,34 +10,37 @@
  *     }
  *
  */
+terraform {
+  required_version = ">= 0.12"
+}
 
 # Get the host zone id
 data "aws_route53_zone" "selected" {
-  count = "${var.dns_zone == "" ? 0 : 1}"
+  count = var.dns_zone == "" ? 0 : 1
 
-  name         = "${var.dns_zone}"
-  private_zone = "${var.dns_private}"
+  name         = var.dns_zone
+  private_zone = var.dns_private
 }
 
 ## Create the endpoint
 resource "aws_vpc_endpoint" "endpoint" {
-  service_name      = "${var.service_name}"
-  route_table_ids   = ["${var.route_table_ids}"]
+  service_name      = var.service_name
+  route_table_ids   = var.route_table_ids
   vpc_endpoint_type = "Gateway"
-  vpc_id            = "${var.vpc_id}"
+  vpc_id            = var.vpc_id
 
   tags = {
-    Name = "${var.name}"
+    Name = var.name
   }
 }
 
 ## Create a DNS entry for this NLB
 resource "aws_route53_record" "dns" {
-  count = "${var.dns_zone != "" ? 1 : 0 }"
+  count = var.dns_zone != "" ? 1 : 0
 
-  zone_id = "${data.aws_route53_zone.selected.id}"
-  name    = "${var.dns_name == "" ? var.name : var.dns_name}"
-  type    = "${var.dns_type}"
-  ttl     = "${var.dns_ttl}"
-  records = ["${lookup(aws_vpc_endpoint.endpoint.dns_entry[0], "dns_name")}"]
+  zone_id = data.aws_route53_zone.selected[0].id
+  name    = var.dns_name == "" ? var.name : var.dns_name
+  type    = var.dns_type
+  ttl     = var.dns_ttl
+  records = [aws_vpc_endpoint.endpoint.dns_entry[0]["dns_name"]]
 }
