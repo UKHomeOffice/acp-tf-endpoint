@@ -73,3 +73,8 @@ variable "subnet_tags" {
 variable "vpc_id" {
   description = "The VPC id you to adding the endpoint to"
 }
+
+variable "subnet_ids" {
+  description = "A list of subnet ids"
+  default     = {}
+}
