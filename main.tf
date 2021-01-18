@@ -19,9 +19,6 @@
  *      }
  *
  */
-terraform {
-  required_version = ">= 0.12"
-}
 
 # Get the host zone id
 data "aws_route53_zone" "selected" {
@@ -33,8 +30,8 @@ data "aws_route53_zone" "selected" {
 
 # Get a list of the subnets to attach to
 data "aws_subnet_ids" "selected" {
-  tags   = "${var.subnet_tags}"
-  vpc_id = "${var.vpc_id}"
+  tags   = var.subnet_tags
+  vpc_id = var.vpc_id
 }
 
 ## Create the security group for the endpoint
