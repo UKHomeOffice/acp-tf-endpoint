@@ -62,6 +62,7 @@ variable "service_name" {
 
 variable "security_tags" {
   description = "A map of additional tags you can add to the security group tags"
+  type        = map(string)
   default     = {}
 }
 
@@ -76,5 +77,6 @@ variable "vpc_id" {
 
 variable "subnet_ids" {
   description = "A list of subnet ids"
-  default     = {}
+  type        = list(string)
+  default     = []
 }
