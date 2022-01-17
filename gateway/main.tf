@@ -10,9 +10,6 @@
  *     }
  *
  */
-terraform {
-  required_version = ">= 0.12"
-}
 
 # Get the host zone id
 data "aws_route53_zone" "selected" {
